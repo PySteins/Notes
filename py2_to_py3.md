@@ -3,48 +3,48 @@
 #### 标准库的修改
 1. `Python3`中将`Python2`中的`urllib2`、`urlparse`合并到`urllib`中，并修改了`urllib`模块。
   * `urllib.error`
-  ```python3
+  ```python
   from urllib.error import HTTPError, URLError
   ```
   * `urllib.parse`
-  ```python3
+  ```python
   from urllib.parse import urlparse, urljoin, urlencode, quote
   ```
   * `urllib.request`
-  ```python3
+  ```python
   from urllib.request import urlopen, Request, build_opener
   ```
 
 2. `Python3`中将`Python2`的`httplib`改为`htttp.client`
-  ```python3
+  ```python
   from http.client import HTTPConnection
   ```
 
 3. `Python3`中将`Python2`的`cookielib`改为`http.cookiejar'
-  ```python3
+  ```python
   import http.cookiejar
   ```
 
 #### print函数
   Python2
-  ```python2
+  ```python
   print 'hello world!'  # hello world!
   ```
   `Python3`中将`print`视为函数
-  ```python3
+  ```python
   print('hello, world!')  # hello, world!
   ```
 
 #### try...except
   在`Python2`中
-  ```python2
+  ```python
   try:
       ...
   except Exception, e:
       ...
   ```
   在`Python3`中改为
-  ```python3
+  ```python
   try:
       ...
   except Exception as e:
@@ -53,7 +53,7 @@
 
 #### 整除
   Python2
-  ```python2
+  ```python
   3 / 2  # 1
   3 // 2  # 1
   3 / 2.0  # 1.5
@@ -61,7 +61,7 @@
   ```
 
   Python
-  ```python3
+  ```python
   3 / 2  # 1.5
   3 // 2  # 1
   3 / 2.0  # 1.5
@@ -70,20 +70,20 @@
 
 #### 编码
   `Python2`默认编码为ASCII，编写代码出现中文时需要在第一行加上#coding=utf-8
-  ```python2
+  ```python
   import sys
   sys.getdefaultencoding()  # 'ascii'
   ```
 
   `Python3`默认编码为`UTF-8`, 删除unicode方法
-  ```python3
+  ```python
   import sys
   sys.getdefaultencoding()  # 'utf-8'
   ```
 
 #### 导入
   `Python3`默认使用绝对导入
-  ```python3
+  ```python
   # 同目录导入
   from .file import *
   from directory.file import *
@@ -98,7 +98,7 @@
 
 #### xrange
   `Python3`中取消`range`并将xrange`更改为`range`
-  ```python3
+  ```python
   for i in range(x):
     ...
 
@@ -122,14 +122,14 @@
 
 #### long
   `Python3`中将`long`修改为`int`, 无论长短皆为int
-  ```python3
+  ```python
   int(str)
   int(float)
   ```
 
 #### list.sort(), sorted()
   `Python3`中对内置方法`sorted()`和`list.sort()`取消了对`cmp`参数的支持
-  ```python3
+  ```python
 
   '''
   sorted(iterable, key=None, reverse=False)`
@@ -146,4 +146,6 @@
   # sort()对原列表排序
   L.sort()
   print(L)  # [1, 2, 3, 4, 5]
+  ```
 
+#### 待补充......
