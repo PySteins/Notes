@@ -37,3 +37,82 @@
     });
     ```
 
+5. `formSignIn`获取表单数据后转至`signIn()`进行登录操作
+    ```javascript
+    function signIn() {
+        var signInUrl = $('#formSignIn').attr('action')
+        var promise = $.ajax({
+                        type: "POST",
+                        url: signInUrl,
+                        data: {
+                            username    : $('[name="username"]').val(),
+                            password    : $('[name="password"]').val(),
+                            key         : GLOBAL.DATA.LOGIN.key,
+                            captcha     : $('[name="captcha"]').val(),
+                            host_type   : 2
+                        },
+                        xhrFields: {
+                            withCredentials: true
+                        }
+                    });
+        // 成功获取登录返回数据
+        promise.done(function(data){
+            handleSignIn(data);
+        });
+
+        // 登录失败
+        promise.fail(function(data){
+            ou.dialogMes('网络错误, 请刷新页面重试');
+        });
+    ```
+
+6. `signIn()`成功`handleSignIn`登录成功则跳转至`user/home`或者起源页面，否则按错误进行提示
+    ```JavaScript
+    function handleSignIn(data) {
+
+        switch(data.c) {
+
+
+            // 返回0时代表登录成功
+            // 页面跳转到个人中心 或者起源页面
+            case 0 :
+                var redirectURL = ou.getUrlParameter('redirectURL');
+                if(redirectURL) {
+                    location.href = decodeURIComponent(redirectURL);
+                } else {
+                    location.pathname = '/user/home/';
+                }
+                break;
+
+
+            // 验证码错误
+            // 提示验证码错误, 并且显示验证码输入框
+            case 10001 :
+                ou.dialogMes('验证码错误');
+                $('#captchaWrap').show();
+                GLOBAL.DATA.LOGIN.isNeedCaptcha = true;
+                getCaptcha();
+                break;
+    ......
+    ```
+
+7. 步骤3和6跳转至`/user/home`时会进行是否登录的验证，若验证为未登录则跳转会`user/signin`
+    ```python
+    def account_home_messages(request):
+    """ 系统消息 """
+    if not is_user_login(request):
+        return HttpResponseRedirect('/user/signin/')
+    ......
+    ```
+
+8. `is_user_login(request)`通过`request.session`是否存在用户信息判断是否登录
+    ```python
+    def is_user_login(request):
+    """has user login"""
+    login_user_name = request.session.get(LOGIN_USER_NAME, None)
+    login_user_id = request.session.get(LOGIN_USER_ID, None)
+    if login_user_id and login_user_name:
+        return True
+
+    return False
+    ```
