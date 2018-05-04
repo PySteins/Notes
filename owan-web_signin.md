@@ -10,30 +10,30 @@
 
 4. `m_signin.html`通过`<form id="formSignIn" ...>`将表单数据传至`static/js/touch/m_sign-in.js`
     ```javascript
-$('#formSignIn').on('submit', function(event){
+    $('#formSignIn').on('submit', function(event){
 
-    // 确认已输入帐号
-    if(!$('[name="username"]').val()){
-    ou.dialogMes('请输入帐号');
-     
-    // 确认已输入密码
-    }else if(!$('[name="password"]').val()) {
-    ou.dialogMes('请输入密码');
-     
-    // 是否需要验证码
-    }else if (!GLOBAL.DATA.LOGIN.isNeedCaptcha){
-    signIn();
-     
-    // 确认是否已输入验证码
-    }else if(!$('[name="captcha"]').val()){
-    ou.dialogMes('请输入验证码');
-     
-    // 信息完整则登录
-    }else {
-    signIn();
-    }
-     
-    event.preventDefault();
-});
+        // 确认已输入帐号
+        if(!$('[name="username"]').val()){
+        ou.dialogMes('请输入帐号');
+         
+        // 确认已输入密码
+        }else if(!$('[name="password"]').val()) {
+        ou.dialogMes('请输入密码');
+         
+        // 是否需要验证码
+        }else if (!GLOBAL.DATA.LOGIN.isNeedCaptcha){
+        signIn();
+         
+        // 确认是否已输入验证码
+        }else if(!$('[name="captcha"]').val()){
+        ou.dialogMes('请输入验证码');
+         
+        // 信息完整则登录
+        }else {
+        signIn();
+        }
+         
+        event.preventDefault();
+    });
     ```
 
