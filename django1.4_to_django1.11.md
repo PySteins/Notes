@@ -37,7 +37,7 @@
       # 指定同目录下的视图函数
       url('^article/m/(?P<id>\d+)/$', views.mobi_article_detail),
 
-      # 指定其他目录下的url文件
+      # 指定其他目录下的urls.py
       url(r'^sem/', include('apps.sem.urls')),
   ]
   ```
