@@ -41,3 +41,44 @@
       url(r'^sem/', include('apps.sem.urls')),
   ]
   ```
+
+#### 库版本问题
+  `django-debug-toolbar`需要更新以适配`django1.11`
+
+
+#### `render_to_response`渲染模板方法更换
+  改为
+  ```python
+  render(request, 'template.html', data)
+  ```
+
+#### `template`配置更换
+  ```
+  TEMPLATE_LOADERS = (
+      'django.template.loaders.filesystem.Loader',
+      'django.template.loaders.app_directories.Loader',
+      'django.template.loaders.eggs.Loader',
+  )
+  TEMPLATE_CONTEXT_PROCESSORS = (
+      'django.core.context_processors.request',
+      'django.contrib.auth.context_processors.auth',
+      'django.contrib.messages.context_processors.messages',
+      #'django.core.context_processors.csrf',
+  )
+
+  '''更改为'''
+  TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [os.path.join(BASEDIR, "templates")],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
+                ],
+        },
+    },
+]
