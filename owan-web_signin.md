@@ -66,7 +66,51 @@
         });
     ```
 
-6. `signIn()`成功`handleSignIn`登录成功则跳转至`user/home`或者起源页面，否则按错误进行提示
+6. `signIn()`通过ajax方法实现form表单的提交至`/api/user/signin`,交由视图函数`apps.api.account_views.account_signin`
+    ```python
+    def account_signin(request):
+    """login api"""
+    # 检查是否需要允许跨域头
+    origin_host = request.META.get('HTTP_ORIGIN')
+    cors = HostCors(origin_host)
+
+    data = request.POST
+    username = data.get('username', None)
+    # 获取api返回的验证用户结果
+    res = check_account_valid(request, data)
+    c, m, uid = res['c'], res['m'], res['uid']
+    need_captcha = False
+    if c == 10001:
+        return cors.result_response(c, m, return_data={'need_captcha': True})
+
+    if c != 0:
+        try:
+            request.session['login_error_num'] += 1
+        except KeyError:
+            request.session['login_error_num'] = 0
+        login_error_num = request.session.get('login_error_num', 0)
+        if login_error_num >= ERROR_NUM_FOR_CAPTCHA:
+            need_captcha = True
+    else:
+        set_login_session(request, uid, username)
+        request.session['login_error_num'] = 0
+
+    return cors.result_response(c, m, return_data={'need_captcha': need_captcha})
+    ```
+
+8. `account_signin`用户信息验证成功则通过`set_login_session`在`request.session`用户信息
+    ```python
+    def set_login_session(request, uid, username):
+    """设置用户登录session"""
+    set_local_sessionid(request, uid, username)
+
+    def set_local_sessionid(request, uid, username):
+    """设置本地session"""
+    request.session[LOGIN_USER_NAME] = username
+    request.session[LOGIN_USER_ID] = uid
+    ```
+
+8. `signIn()`登录成功则通过`handleSignIn`跳转至`user/home`或者起源页面，否则按错误进行提示
     ```JavaScript
     function handleSignIn(data) {
 
@@ -96,7 +140,7 @@
     ......
     ```
 
-7. 步骤3和6跳转至`/user/home`时会进行是否登录的验证，若验证为未登录则跳转会`user/signin`
+9. 步骤3和6跳转至`/user/home`时会进行是否登录的验证，若验证为未登录则跳转会`user/signin`
     ```python
     def account_home_messages(request):
     """ 系统消息 """
@@ -105,7 +149,7 @@
     ......
     ```
 
-8. `is_user_login(request)`通过`request.session`是否存在用户信息判断是否登录
+10. `is_user_login(request)`通过`request.session`是否存在用户信息判断是否登录
     ```python
     def is_user_login(request):
     """has user login"""
