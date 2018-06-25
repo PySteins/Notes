@@ -82,3 +82,20 @@
           },
       },
   ]
+  ```
+
+#### celery日志中TypeError: context must be a dict rather than Context.
+  ```python
+  from django.template.loader import get_template
+  t = get_template(template_path)
+  params = {
+      'data': 'data'
+  }
+  
+  # django1.8中
+  ctx = Context(params)
+  html_content = t.render(ctx)
+
+  # django1.11中改为接收字典而不是Context对象
+  html_content = t.render(params)
+  ```
