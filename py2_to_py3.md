@@ -20,30 +20,30 @@
   from http.client import HTTPConnection
   ```
 
-3. `Python3`中将`Python2`的`cookielib`改为`http.cookiejar'
+3. `Python3`中将`Python2`的`cookielib`改为`http.cookiejar`
   ```python
   import http.cookiejar
   ```
 
 #### print函数
-  Python2
+`python2`
   ```python
   print 'hello world!'  # hello world!
   ```
-  `Python3`中将`print`视为函数
+`Python3`中将`print`视为函数
   ```python
   print('hello, world!')  # hello, world!
   ```
 
 #### try...except
-  在`Python2`中
+`python2`
   ```python
   try:
       ...
   except Exception, e:
       ...
   ```
-  在`Python3`中改为
+`Python3`
   ```python
   try:
       ...
@@ -52,7 +52,7 @@
   ```
 
 #### 整除
-  Python2
+`python2`
   ```python
   3 / 2  # 1
   3 // 2  # 1
@@ -60,7 +60,7 @@
   3 // 2.0  # 1.0
   ```
 
-  Python
+`python3`
   ```python
   3 / 2  # 1.5
   3 // 2  # 1
@@ -69,20 +69,20 @@
   ```
 
 #### 编码
-  `Python2`默认编码为ASCII，编写代码出现中文时需要在第一行加上#coding=utf-8
+`python2`默认编码为ASCII，编写代码出现中文时需要在第一行加上#coding=utf-8
   ```python
   import sys
   sys.getdefaultencoding()  # 'ascii'
   ```
 
-  `Python3`默认编码为`UTF-8`, 删除unicode方法
+`python3`默认编码为`UTF-8`, 删除unicode方法
   ```python
   import sys
   sys.getdefaultencoding()  # 'utf-8'
   ```
 
 #### 导入
-  `Python3`默认使用绝对导入
+`python3`默认使用绝对导入
   ```python
   # 同目录导入
   from .file import *
@@ -97,7 +97,7 @@
   ```
 
 #### xrange
-  `Python3`中取消`range`并将xrange`更改为`range`
+`python3`中取消`range`并将xrange`更改为`range`
   ```python
   for i in range(x):
     ...
@@ -106,9 +106,9 @@
   ```
 
 #### 字典
-  `Python3`取消`dict.iterkeys(), dict.itervalues(), dick.iteritems()`
-  将`dict.keys(), dict.values(), dict.items()`改为视图对象, 可迭代
-  ```Python3
+`Python3`取消`dict.iterkeys()`, `dict.itervalues()`, `dick.iteritems()`
+`dict.keys()`, `dict.values()`, `dict.items()`改为视图对象, 可迭代
+  ```python
   type(dict.keys())  # <class 'dict_keys'>
   type(dict.items())  # <class 'dict_items'>
   type(dict.values())  # <class 'dict_values'>
@@ -122,14 +122,14 @@
   ```
 
 #### long
-  `Python3`中将`long`修改为`int`, 无论长短皆为int
+`python3`中将`long`修改为`int`, 无论长短
   ```python
   int(str)
   int(float)
   ```
 
 #### list.sort(), sorted()
-  `Python3`中对内置方法`sorted()`和`list.sort()`取消了对`cmp`参数的支持
+`Python3`中对内置方法`sorted()`和`list.sort()`取消了对`cmp`参数的支持
   ```python
 
   '''
@@ -150,15 +150,19 @@
   ```
 
 #### 新式8进制变量SynataxError: invalid token错误
-  python2中
+`python2`
+  ```
   >>> 01
   1
+  ```
 
-  python3中
+`python3`
+  ```
   >>> 01
   SynataxError: invalid token
   >>> 0o1
   1
+  ```
 
 #### python3取消cmp
   ```python
@@ -178,27 +182,51 @@
   ```
 
 #### python3 md5
-  **python2中
-  函数形式
   ```python
+  '''python2'''
+  # 函数
   import hashlib
   def md5(str):
       m = hashlib.md5()
       m.update(str)
       return m.hexdigest()
-  ```
-  # 简洁形式
+      
+  # 简洁
   sign = hashlib.md5(str).hexdigest()
-
-  '''python3中进行hash之前必须编码'''
-   # 函数形式
+  
+  '''python3'''
+  # 函数
   def md5(str):
       m = hashlib.md5()
       m.update(str.encode('utf-8'))
       return m.hexdigest()
-
-  # 简洁形式
+      
+  # 简洁
   sign = hashlib.md5(str.encode('utf-8')).hexdigest()
-
-  关于
+  
+  '''
+  关于hashlib.md5(str).digest()
+  下面以拼接'a', 'b'为例
+  
+  python2中返回二进制样式的str
+  >>> a = hashlib.md5('a').digest()
+  >>> a
+  '\x0c\xc1u\xb9\xc0\xf1\xb6\xa81\xc3\x99\xe2iw&a'
+  
+  >>> hashlib.md5(a + 'b').hexdigest()
+  '2f63866f41c2a2b0228714a21d5f75fe'
+  
+  python3中直接返回二进制类型
+  >>> a = hashlib.md5('a'.encode('utf-8')).digest()
+  >>> a
+  b'\x0c\xc1u\xb9\xc0\xf1\xb6\xa81\xc3\x99\xe2iw&a'
+  
+  >>> hashlib.md5((str(a) + 'b').encode('utf-8').hexdigest()
+  '80193715c7375e9cdd7c3d5867d5889c'
+  
+  返回结果并不一致，解决方法如下
+  >>> c = b'%s%s' % (a, bytes('b'.encode('utf-8')))
+  >>> hashlib.md5(c).hexdigest()
+  '2f63866f41c2a2b0228714a21d5f75fe'
+  '''
   ```
