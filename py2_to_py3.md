@@ -119,6 +119,7 @@
   
   # 转为列表形式
   list(dict.keys())
+  ```
 
 #### long
   `Python3`中将`long`修改为`int`, 无论长短皆为int
@@ -148,4 +149,56 @@
   print(L)  # [1, 2, 3, 4, 5]
   ```
 
-#### 待补充......
+#### 新式8进制变量SynataxError: invalid token错误
+  python2中
+  >>> 01
+  1
+
+  python3中
+  >>> 01
+  SynataxError: invalid token
+  >>> 0o1
+  1
+
+#### python3取消cmp
+  ```python
+  '''python2中的cmp'''
+  cmp(80, 100)   # -1
+  cmp(180, 100)  #  1
+  cmp(-80, 100)  # -1
+  cmp(80, -100)  #  1
+
+  '''python3改用operator, 返回bool类型'''
+  import operator
+  operator.gt(1,2)      # greater than
+  operator.ge(1,2)      # greater and equal
+  operator.eq(1,2)      # equal
+  operator.le(1,2)      # less and equal
+  operator.lt(1,2)      # less than
+  ```
+
+#### python3 md5
+  **python2中
+  函数形式
+  ```python
+  import hashlib
+  def md5(str):
+      m = hashlib.md5()
+      m.update(str)
+      return m.hexdigest()
+  ```
+  # 简洁形式
+  sign = hashlib.md5(str).hexdigest()
+
+  '''python3中进行hash之前必须编码'''
+   # 函数形式
+  def md5(str):
+      m = hashlib.md5()
+      m.update(str.encode('utf-8'))
+      return m.hexdigest()
+
+  # 简洁形式
+  sign = hashlib.md5(str.encode('utf-8')).hexdigest()
+
+  关于
+  ```
